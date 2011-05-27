@@ -1,0 +1,21 @@
+#{extends 'main.html' /}
+#{set title:'Home page - Summary' /}
+
+
+#{if freePersons}
+<h1><span>List of currently free employees</span></h1>
+<ul>
+	#{list freePersons}
+		<li>${_.firstName} ${_.lastName}</li>
+	#{/list}
+</ul>
+#{/if}
+
+#{if onCallPersons}
+<h1><span>List of currently on call employees</span></h1>
+<ul>
+	#{list onCallPersons}
+		<li>${_.firstName} ${_.lastName}</li>
+	#{/list}
+</ul>
+#{/if}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>#{get 'title' /}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/main.css'}">
+        <link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/menu.css'}">
+        <link href='http://fonts.googleapis.com/css?family=Orbitron' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Droid+Sans' rel='stylesheet' type='text/css'>
+        <link href='http://fonts.googleapis.com/css?family=Ubuntu' rel='stylesheet' type='text/css'>
+        #{get 'moreStyles' /}
+        <link rel="shortcut icon" type="image/png" href="@{'/public/images/favicon.png'}">
+        <script src="@{'/public/javascripts/jquery-1.4.2.min.js'}" type="text/javascript" charset="utf-8"></script>
+        #{get 'moreScripts' /}
+    </head>
+    <body>
+        <div id="page">
+
+            <ul id="navigation">
+                #{if play.mvc.Http.Request.current().controller == "Home"}
+                    <li class="one selected">
+                #{/if}
+                #{else}
+                    <li class="one">
+                #{/else}
+                <a href="@{Home.index}">Home</a></li>
+
+                #{if play.mvc.Http.Request.current().controller == "Planning"}
+                 <li class="two selected">
+                #{/if}
+                #{else}
+                    <li class="two">
+                #{/else}
+                <a href="@{Planning.index}">Planning</a></li>
+
+                #{if play.mvc.Http.Request.current().controller == "Statistics"}
+                <li class="three selected">
+                #{/if}
+                #{else}
+                    <li class="three">
+                #{/else}
+                <a href="@{Statistics.index}">Statistics</a></li>
+
+                #{if play.mvc.Http.Request.current().controller == "About"}
+                <li class="four selected">
+                #{/if}
+                #{else}
+                    <li class="four">
+                #{/else}
+                <a href="@{About.index}">About</a></li>
+
+                #{if play.mvc.Http.Request.current().controller == "Debug"}
+                    <li class="four selected">
+                #{/if}
+                #{else}
+                    <li class="four">
+                #{/else}
+                <a href="@{Debug.index}">Debug Mode</a></li>
+                    
+<!--                <li class="shadow"></li>-->
+            </ul>
+
+            <div id="content" class="transition">
+
+                #{doLayout /}
+
+            </div>
+            
+            <div id="contextScript">
+                #{get 'contextScript' /}
+            </div>
+
+            <div id="footer">
+                <span class="strong">Play Planning Center (PPC)</span> - Example application made with 
+                <a href="http://playframework.org">Play! framework ${play.Play.version} </a> - ${new java.util.Date().format("yyyy")} -
+                <a href="http://blog.infine.com">In Fine Consulting</a><br/>
+                This page is HTML5 valid.<br/>
+                <form action="http://validator.w3.org/check" method="post" target="_blank" id="validForm">
+                    <input type="hidden" value="" id="validContent" name="fragment"/>
+                    <a href="#" id="validLink">
+                        <img src="http://www.w3.org/html/logo/badge/html5-badge-h-css3-semantics-storage.png" alt="Check HTML validity" title="Check HTML validity"/>
+                    </a>
+                </form>
+                <script type="text/javascript">
+                    $("#validLink").click(function(event){
+                        event.preventDefault();
+                        var contentHTML = '<!DOCTYPE html> <html>' + $('html').html() + '</html>';
+                        $("#validContent").val(contentHTML);
+                        $("#validForm").submit();
+                    });
+                </script>
+            </div>
+        </div>
+        
+        <script type="text/javascript">
+//            $(document).ready(function(){
+//                $("ul#navigation li a").click(function() {
+//                    $("ul#navigation li").removeClass("selected");
+//                    $(this).parents().addClass("selected");
+//                    return false;
+//                });
+//            });
+        </script>
+
+    </body>
+</html>

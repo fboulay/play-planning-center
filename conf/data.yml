@@ -1,0 +1,33 @@
+#TimeSlot(ts):
+#    startDate: 2011-02-13
+#    endDate: 2011-02-14
+
+Person(florian):
+    firstName: Florian
+    lastName: Boulay
+    isDeletable: false
+
+Person(antonio):
+    firstName: Antonio
+    lastName: Goncalves
+    isDeletable: false
+
+Person(antoine):
+    firstName: Antoine
+    lastName: Ramponi
+    isDeletable: false
+
+Person(laurent):
+    firstName: Laurent
+    lastName: Magnin
+    isDeletable: false
+
+#PersonAndTimeSlot(pats1):
+#    person: florian
+##    timeSlot: ts
+#    status: AVAILABLE
+#
+#PersonAndTimeSlot(pats2):
+#    person: antoine
+##    timeSlot: ts
+#    status: ON_CALL

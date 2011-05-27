@@ -1,0 +1,143 @@
+
+package models;
+
+import java.util.Date;
+import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.Query;
+import play.Logger;
+import play.Play;
+import play.db.jpa.JPA;
+import play.db.jpa.Model;
+
+/**
+ * Association of a time slot with a person and a status.
+ * 
+ * @author florian
+ */
+@Entity
+public class PersonAndTimeSlot extends Model {
+
+   
+
+    public static enum TimeSlotStatus {
+
+        AVAILABLE("Available", "green"),
+        UNAVAILABLE("Unavailable", "grey"),
+        ON_CALL("On call", "red");
+
+       
+        private String value;
+        private String htmlcolor;
+
+        private TimeSlotStatus(String value, String htmlColor) {
+            this.value = value;
+            this.htmlcolor = htmlColor;
+        }
+        
+        public static TimeSlotStatus findNextStatus(TimeSlotStatus timeSlotStatus) {
+            TimeSlotStatus[] values = TimeSlotStatus.values();
+            int index = -1;
+            for (int i = 0; i < values.length; i++) {
+                if(values[i] == timeSlotStatus){
+                    index = i;
+                    break;
+                }
+            }
+            
+            return values[(index + 1) % values.length];
+        }
+
+        public String getValue() {
+            return value;
+        }
+
+        public String getHtmlColor() {
+            return htmlcolor;
+        }
+    }
+    @ManyToOne
+    public Person person;
+    @ManyToOne(cascade = CascadeType.PERSIST)
+    public TimeSlot timeSlot;
+    public TimeSlotStatus status;
+
+    public static List<PersonAndTimeSlot> getPatsInTimeSlot(Date startDate, Date endDate) {
+        createMissingPats(startDate, endDate);
+        return PersonAndTimeSlot.find("select pats from PersonAndTimeSlot pats"
+                + " where pats.timeSlot.startDate >= ? and pats.timeSlot.endDate <= ? order by person, startDate",
+                startDate, endDate).fetch();
+    }
+
+    public static void createDefaultPats(Person person) {
+        List<TimeSlot> allSlots = TimeSlot.findAll();
+        for (TimeSlot ts : allSlots) {
+            new PersonAndTimeSlot(person, ts, TimeSlotStatus.AVAILABLE).save();
+        }
+    }
+
+    public static long findMaxOnCallSessions(Date startDate, Date endDate) {
+        Query allOnCallSession = JPA.em().createQuery("select pats.person.id, count(pats) from PersonAndTimeSlot pats where pats.status=?1 group by pats.person order by pats.person.id");
+        allOnCallSession.setParameter(1, TimeSlotStatus.ON_CALL);
+        List<Object[]> results = allOnCallSession.getResultList();
+        long max = 0;
+        for (Object[] result : results) {
+            if (max < (Long) result[1]) {
+                max = (Long) result[1];
+            }
+        }
+        return max;
+    }
+    
+     public static void nextStatus(long id) {
+        PersonAndTimeSlot pats = PersonAndTimeSlot.findById(id);
+        pats.status = TimeSlotStatus.findNextStatus(pats.status);
+        pats.save();
+    }
+
+    static void createMissingPats(Date startDate, Date endDate) {
+        long nbSlots = TimeSlot.count("select count(ts) from TimeSlot ts where ts.startDate >= ? and ts.endDate <= ?",
+                startDate, endDate);
+        long nbPerson = Person.count();
+        long nbPats = PersonAndTimeSlot.count("select count(distinct pats) from PersonAndTimeSlot pats "
+                + "where pats.timeSlot.startDate >= ? and pats.timeSlot.endDate <= ?", startDate, endDate);
+
+        // if there is missing pats, then we create them
+        if (nbSlots * nbPerson != nbPats) {
+            List<Person> listPerson = Person.findAll();
+            List<TimeSlot> listTs = TimeSlot.find("select ts from TimeSlot ts where ts.startDate >= ? and ts.endDate <= ?",
+                    startDate, endDate).fetch();
+            for (Person person : listPerson) {
+                for (TimeSlot ts : listTs) {
+                    long count = PersonAndTimeSlot.count("select count(distinct pats) from PersonAndTimeSlot pats "
+                            + "where pats.timeSlot = ? and pats.person = ?",
+                            ts, person);
+                    if (count == 0) {
+                        new PersonAndTimeSlot(person, ts, TimeSlotStatus.AVAILABLE).save();
+                    }
+                }
+            }
+        }
+
+        nbPats = PersonAndTimeSlot.count("select count(pats) from PersonAndTimeSlot pats "
+                + "where pats.timeSlot.startDate >= ? and pats.timeSlot.endDate <= ?", startDate, endDate);
+
+        if (nbSlots * nbPerson != nbPats) {
+            throw new RuntimeException("It should have " + nbSlots * nbPerson + " pats and there is " + nbPats);
+        }
+    }
+
+    public PersonAndTimeSlot(Person person, TimeSlot timeSlot, TimeSlotStatus status) {
+        super();
+        this.person = person;
+        this.timeSlot = timeSlot;
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "PersonAndTimeSlot{" + "person={" + person.firstName + " " + person.lastName + "}timeSlot=" + timeSlot + "status=" + status + '}';
+    }
+}

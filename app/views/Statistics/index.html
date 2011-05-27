@@ -1,0 +1,41 @@
+#{extends 'main.html' /}
+#{set title:'Statistics' /}
+
+#{if hasStats}
+
+<!-- http://chart.apis.google.com/chart
+   ?chxl=1:|test|test+2
+   &chxr=0,0,160
+   &chxt=y,x
+   &chbh=a,4,4
+   &chs=440x260
+   &cht=bvs
+   &chco=4D89F9,C6D9FD
+   &chds=20,175,0,120
+   &chd=t:-1,50,60,80,40,60,30|50,60,100,40,30,40,30
+   &chg=-1,0,0,4
+   &chma=|20,20
+   &chtt=People
+   &chts=676767,7.5 -->
+
+<!-- http://chart.apis.google.com/chart
+    ?chxl=1:|test|test+2
+    &chxr=0,0,160
+    &chxt=y,x
+    &chbh=a,4,4
+    &chs=540x260
+    &cht=bvs
+    &chco=4D89F9,C6D9FD
+    &chds=20,175,0,120
+    &chd=t:-1,50,60,80,40,60,30|50,60,100,40,30,40,30
+    &chtt=People -->
+
+<div style="text-align: center">
+    <img src="http://chart.apis.google.com/chart?chxl=0:|${legend}&chxr=0,0,10|1,0,${maxY}&chxt=x,y&chbh=a,15,15&chs=400x170&cht=bvs&chco=D3805C&chds=0,${maxY}&chd=t:${values}&chtt=On+call+per+person+for+current+week" width="440" height="220" alt="Horizontal bar chart" />
+</div>
+#{/if}
+#{else}
+<p>
+No statistics to gather
+</p>
+#{/else}

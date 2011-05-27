@@ -1,0 +1,36 @@
+# Routes
+# This file defines all application routes (Higher priority routes first)
+# ~~~~
+
+# Import CRUD routes
+*      /admin                                   module:crud
+
+# Map static resources from the /app/public folder to the /public path
+GET     /public/                                staticDir:public
+
+# Home page
+GET     /                                       Home.index
+# Planning page
+GET     /planning                               Planning.index
+# Stastitics page
+GET     /stats                                  Statistics.index
+# Debug page
+GET     /debug                                  Debug.index
+# About page
+GET     /about                                  About.index
+
+# Operation on persons
+DELETE	/person/{id}				Planning.deletePerson
+DELETE	/person/onCall/{id}			Home.freePerson
+PUT	/person/onCall/{id}             	Home.onCallPerson
+POST    /person/create                          Planning.createPerson
+POST    /person/create/ajax                     Planning.createPersonAjax
+
+# Operation on planning
+GET     /planning/week/relative/{weekNb}        Planning.changeRelativeWeek
+PUT     /planning/changeStatus/html/{id}        Planning.nextStatus
+PUT     /planning/changeStatus/ajax/{id}        Planning.nextStatusAjax
+
+
+# Catch all
+*       /{controller}/{action}                  {controller}.{action}

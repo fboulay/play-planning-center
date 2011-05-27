@@ -1,0 +1,24 @@
+#{extends 'main.html' /}
+#{set title:'Debug data' /}
+
+
+<h3>All Person and time slots (${pats.size()})</h3>
+<ul>
+#{list pats}
+<li>${_}</li>
+#{/list}
+</ul>
+
+<h3>All time slots (${ts.size()})</h3>
+<ul>
+#{list ts}
+<li>${_}</li>
+#{/list}
+</ul>
+
+<h3>All persons (${persons.size()})</h3>
+<ul>
+#{list persons}
+<li>${_}</li>
+#{/list}
+</ul>

@@ -1,0 +1,207 @@
+#{extends 'main.html' /}
+#{set title:'Planning people' /}
+#{set 'moreStyles'}
+<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/table.css'}" />
+<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/tooltip.css'}" />
+#{/set}
+
+
+#{if curWeek && patsInWeek}
+
+<div id="previous" class="arrow" title="previous week">
+    <a href="@{Planning.changeRelativeWeek(weekNb - 1)}">&laquo;</a>
+</div>
+<div id="next" class="arrow" title="next week">
+    <a href="@{Planning.changeRelativeWeek(weekNb + 1)}">&raquo;</a>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th></th>
+            #{list curWeek}
+                #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
+                                                     new org.joda.time.DateMidnight(new java.util.Date()))
+                                                     .getDays() == 0}
+                    <th class="none">today<span class="triangle"/></th>
+                #{/if}
+                #{else}
+                    <th></th>
+                #{/else}
+
+            #{/list}
+        </tr>
+        <tr>
+            <th></th>
+            #{list curWeek}
+                #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
+                                                     new org.joda.time.DateMidnight(new java.util.Date()))
+                                                     .getDays() == 0}
+                    <th class="today">
+                #{/if}
+                #{else}
+                    <th>
+                #{/else}
+                    ${_.startDate.format("E MMM dd")}</th>
+            #{/list}
+        </tr>
+    </thead>
+    <tfoot>
+        <tr>
+            <td colspan="8">
+                #{if flash.createError}
+                    <div id="addDiv" style="display:none"><a href="#">Add a person&hellip;</a></div>
+                    <div id="personForm">
+                #{/if}
+                #{else}
+                    <div id="addDiv"><a href="#">Add a person&hellip;</a></div>
+                    <div id="personForm" style="display: none">
+                #{/else}
+                    #{form @Planning.createPerson()}
+                        <label for="firstName">First Name</label>
+                        <input type="text" name="person.firstName" id="firstName" value="${person?.firstName}"/>
+                        <label for="lastName">Last Name</label>
+                        <input type="text" name="person.lastName" id="lastName" value="${person?.lastName}"/>
+                        <input type="submit" value="Create"/>
+                        #{if flash.createError}
+                        <div class="error">
+                            All fields are required
+                        </div>
+                        #{/if}
+                    #{/form}
+                </div>
+                
+            </td>
+        </tr>
+    </tfoot>
+    <tbody>
+        %{ 
+            def pers = -1; 
+         }%
+        #{list items:patsInWeek, as:'pats'}
+            %{ if (pers != pats.person.id){
+                pers = pats.person.id;
+                if (pers != -1) { }%
+                    </tr>
+                %{ } }%
+                <tr>
+                <td>${pats.person.name}
+                    #{ if pats.person.isDeletable }
+                        <span class="delete">
+                            <a href="@{Planning.deletePerson(pats.person.id)}?x-http-method-override=DELETE" title="Delete ${pats.person.name}">&nbsp;X&nbsp;</a>
+                        </span>
+                    #{/if}
+                </td>
+            %{ } }%
+            #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(pats.timeSlot.startDate),
+                                                 new org.joda.time.DateMidnight(new java.util.Date()))
+                                                .getDays() == 0}
+               <td class="today" >
+            #{/if}
+            #{else}
+                <td>
+            #{/else}
+            <a id="pats-${pats.id}" href="@{Planning.nextStatus(pats.id)}?x-http-method-override=PUT" class="tooltip">
+                <div style="background-color: ${pats.status.htmlColor}" title="${pats.status.value}" class="transition">&nbsp;</div>
+                <span class="classic">
+                    Update the status to ${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}
+                </span>
+            </a>
+            </td>
+        #{/list}
+        </tr>
+    </tbody>
+</table>
+
+#{/if}
+#{else}
+<p>
+Nothing to schedule...
+</p>
+
+<h2>Add the first person</h2>
+#{if flash.createError}
+    <div class="error">
+    All fields are required
+    </div>
+#{/if}
+<div id="personForm">
+    #{form @Planning.createPerson()}
+    <label for="firstName">First Name</label>
+    <input type="text" name="person.firstName" id="firstName"/>
+    <br/>
+    <label for="lastName">Last Name</label>
+    <input type="text" name="person.lastName" id="lastName"/>
+    <br/>
+    <input type="submit" value="Create"/>
+    #{/form}
+</div>
+
+#{/else}
+
+
+#{set 'contextScript'}
+<script type="text/javascript">
+    // show the form to add a new person
+    $("#addDiv:visible").live('click', function(event){
+        event.preventDefault();
+        $("#addDiv").fadeOut(200, function () {
+            $("#personForm").fadeIn();
+            $("#firstName").focus();
+        });
+    });
+    
+//    // hide the form to add a new person
+//    $("#personForm").click(function(event){
+//        $("#personForm").fadeOut(200, function () {
+//            $("#addDiv").fadeIn();
+//        });
+//    });
+    
+    // manage the create person form in ajax
+    $("#personForm > form").live("submit", function(event){
+        event.preventDefault();
+        //var url = $(this).attr("action") + "/ajax";
+        var url = $(this).attr("action");
+        var args = {};
+        args["person.firstName"] = $(this).find("#firstName").val();
+        args["person.lastName"] =  $(this).find("#lastName").val();
+        args["authenticityToken"] =  $(this).find("input[type=hidden]").val();
+        $("#content").addClass("loading");
+        $.post(url, args, 
+        function(data){
+            $("#content").removeClass("loading");
+            $("#content").html(data.substring(data.indexOf('<div id="content"') + 37, data.indexOf('<div id="footer">')));
+//            $(".table > tbody > tr:last").hide();
+//            $(".table > tbody > tr:last").slideDown("slow");
+        });
+    });
+
+    // show next and previous page in the planning with ajax
+    $(".arrow").live("click", function(event){
+        event.preventDefault();
+        var url = $(this).find("a").attr("href");
+        $("#content").addClass("loading");
+        $.get(url, function(data) {
+            $("#content").removeClass("loading");
+            $("#content").html(data.substring(data.indexOf('<div id="content"') + 37, data.indexOf('<div id="footer">')));
+             
+        });
+    });
+
+    // change status with ajax
+    $("a.tooltip").live('click', function(event){
+        event.preventDefault();
+        var url = $(this).attr("href");
+        url = url.replace("/html/", "/ajax/");
+        var idLink = $(this).attr("id");
+        $.get(url , function(data){
+            $("#"+idLink + " > div").css("background-color", data.color);
+            var oldText = $("#"+idLink + " > span").text();
+            var newText = oldText.replace(data.oldStatus, data.newStatus);
+            $("#"+idLink + " > span").text(newText);
+        });
+    });
+    
+</script>
+#{/set}

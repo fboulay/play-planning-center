@@ -1,0 +1,163 @@
+#next.arrow {
+    float: right;
+    margin-right: 5px;
+}
+
+#previous.arrow {
+    float: left;
+    margin-left: 5px;
+}
+
+.arrow {
+    font-family: "Droid Sans", Arial,  sans-serif;
+    font-size: 7em;
+    background-color: #CCC;
+    margin-top: 3%;
+    margin-bottom: 1%;
+    -webkit-border-radius: 15px;
+    -moz-border-radius: 30px;
+    border-radius: 15px;
+    -moz-transition-duration: 200ms;
+    -webkit-transition-duration: 200ms;
+    -o-transition-duration: 200ms;
+    transition-duration: 200ms;
+}
+
+.arrow:hover {
+    background-color: #DDCCFF;
+    -moz-transform: scale(1.1);
+    -webkit-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    transform: scale(1.1);
+    -moz-transition-duration: 200ms;
+    -webkit-transition-duration: 200ms;
+    -o-transition-duration: 200ms;
+    transition-duration: 200ms;
+}
+
+.arrow a {
+    text-decoration: none;
+    color: white;
+}
+
+/* table related */
+.table {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin: 20px;
+    text-align: left;
+    width: 83%;
+    margin: auto;
+}
+
+.table th {
+    border-bottom: 2px solid #6678B1;
+    color: #003399;
+    font-size: 14px;
+    font-weight: normal;
+    padding: 10px 8px;
+}
+
+.table th:first-child {
+    width:20%;
+}
+
+.table thead tr:first-child th{
+    border-bottom: 0px none ;
+}
+
+.table thead tr:first-child .none{
+    text-align: center;
+}
+
+.table td {
+    border-bottom: 1px solid #CCCCCC;
+    color: #666699;
+    padding: 6px 1px;
+}
+
+.table tbody tr:hover td {
+    background-color: #DDCCFF;
+    color: black;
+}
+
+.table tfoot tr:hover td {
+    background-color: #fff8dc;
+    color: black;
+}
+
+.table tfoot a {
+    text-decoration: none;
+}
+
+.table th.today {
+    border-top: 1px solid #6678B1;
+    border-left: 1px solid #6678B1;
+    border-right: 1px solid #6678B1;
+}
+
+.table td.today {
+    border-left: 1px solid #6678B1;
+    border-right: 1px solid #6678B1;
+}
+
+.table tbody tr:last-child td.today{
+    border-bottom: 1px solid #6678B1;
+}
+
+/* Form related */
+#addDiv {
+    cursor: pointer;
+    line-height: 2em;
+    padding-left: 10px;
+}
+
+#personForm {
+    line-height: 2em;
+    padding-left: 10px;
+}
+
+#personForm input {
+    border: 1px solid black;
+    -moz-border-radius: 3px 3px 3px 3px;
+    -webkit-border-radius: 3px 3px 3px 3px;
+    border-radius: 3px 3px 3px 3px;
+}
+
+#personForm input[type=submit] {
+    background-color: #DDD;
+}
+
+#personForm input:focus {
+    -moz-box-shadow: 0 0 2px 2px rgba(82, 168, 236, 0.5);
+    -webkit-box-shadow: 0 0 8px rgba(82, 168, 236, 0.5);
+    box-shadow: 0 0 8px rgba(82, 168, 236, 0.5);
+}
+/* rest */
+.delete {
+    color: white;
+    background-color: #A00000;
+    font-weight: bold;
+    margin-left: 3px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    border-radius: 12px;
+}
+
+.delete a {
+    text-decoration: none;
+    color: white;
+}
+
+.triangle {
+    margin: auto;
+    border-color:#333333 transparent transparent transparent;
+    border-style:solid;
+    border-width:10px 10px 0px 10px;
+    height:0;
+    width:0;
+    display: block;
+}
+
+

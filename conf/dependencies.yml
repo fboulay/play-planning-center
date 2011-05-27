@@ -1,0 +1,8 @@
+# Application dependencies
+ 
+require:
+    - play
+    - play -> crud
+    - joda-time -> joda-time 1.6.2
+    - com.google.guava -> guava r09
+    

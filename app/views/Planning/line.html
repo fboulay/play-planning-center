@@ -1,0 +1,34 @@
+%{ 
+    def pers = -1; 
+}%
+#{list items:patsInWeek, as:'pats'}
+    %{ if (pers != pats.person.id){
+        pers = pats.person.id;
+        if (pers != -1) { }%
+        </tr>
+    %{ } }%
+<tr>
+    <td>${pats.person.name}
+        #{ if pats.person.isDeletable }
+        <span class="delete">
+            <a href="@{Planning.deletePerson(pats.person.id)}?x-http-method-override=DELETE" title="Delete ${pats.person.name}">&nbsp;X&nbsp;</a>
+        </span>
+        #{/if}
+    </td>
+    %{ } }%
+    #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(pats.timeSlot.startDate),
+    new org.joda.time.DateMidnight(new java.util.Date()))
+    .getDays() == 0}
+    <td class="today" >
+        #{/if}
+        #{else}
+    <td>
+        #{/else}
+        <a id="pats-${pats.id}" href="@{Planning.nextStatus(pats.id)}?x-http-method-override=PUT" class="tooltip">
+            <div style="background-color: ${pats.status.htmlColor}" title="${pats.status.value}" class="transition">&nbsp;</div>
+            <span class="classic">
+                Update the status to ${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}
+            </span>
+        </a>
+    </td>
+    #{/list}

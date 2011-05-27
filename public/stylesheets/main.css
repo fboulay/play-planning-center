@@ -1,0 +1,107 @@
+body {
+    font-family: "Ubuntu", "Droid Sans", "Segoe UI", Arial, sans-serif;
+    font-size: 0.8em;
+}
+
+a img {
+    border-width: 0px;
+}
+
+h1 {
+    font-size: 2.7em;
+    /*    border-bottom: solid 1px;*/
+    color: #2B477D;
+    padding: 0px 10px 0px 10px;
+    text-shadow: 2px 2px 0px #BBB;
+}
+
+h2 {
+    font-size: 1.5em;
+    color: #2B477D;
+    padding: 0px 10px 0px 10px;
+}
+
+h1 span {
+    padding: 0px 10px 0px 10px;
+    background-image: -webkit-gradient(
+        linear,
+        left bottom,
+        left top,
+        color-stop(0.41, rgb(235,235,235)),
+        color-stop(0.71, rgb(245,245,245)),
+        color-stop(0.86, rgb(255,255,255))
+        );
+    background-image: -moz-linear-gradient(
+        center bottom,
+        rgb(235,235,235) 41%,
+        rgb(245,245,245) 71%,
+        rgb(255,255,255) 86%
+        );
+}
+
+ul {
+    list-style: none;
+}
+
+#page{
+    width: 1000px;
+    margin: 0 auto 0 auto;
+}
+
+#content{
+    border: 1px solid #415F9D;
+    -webkit-box-shadow: #111 0 3px 6px;
+    -moz-box-shadow: #111 0 3px 6px;
+    box-shadow: #111 0 3px 6px;
+}
+
+#footer {
+    font-size: 0.8em;
+    font-family: "Ubuntu", "Trebuchet MS",Helvetica,sans-serif;
+    color: #949494;
+    text-align: center;
+    padding-top: 5px;
+}
+
+#footer a {
+    font-family: "Droid Sans", "Trebuchet MS",Helvetica,sans-serif;
+    font-size: 0.95em;
+    color: FireBrick;
+    text-decoration: none;
+}
+
+#footer a:hover {
+    text-decoration: underline
+}
+
+#validForm img {
+    width: 100px;
+    height: 32px;
+}
+
+/* classes */
+
+.strong {
+    font-weight: bold;
+    font-size: 1.1em;
+}
+
+.error {
+    color: red;
+}
+
+.loading {
+    opacity:0.70;    
+    filter:alpha(opacity=70); /* IE 4, 5, 6 and 7 */
+     -moz-transition-duration: 200ms;
+    -webkit-transition-duration: 200ms;
+    -o-transition-duration: 200ms;
+    transition-duration: 200ms;  
+}
+
+.transition{
+    -moz-transition-duration: 200ms;
+    -webkit-transition-duration: 200ms;
+    -o-transition-duration: 200ms;
+    transition-duration: 200ms;    
+}
