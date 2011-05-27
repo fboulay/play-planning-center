@@ -6,8 +6,8 @@ Sample application made with Play! framework
 Requirements
 ------------
 
-This project need Java to be installed.
-The Play! framework must be installed too. The minimum supported is 1.2.
+This project needs Java.
+The [Play! framework](http://www.playframework.org/) must be installed too. The minimum supported version is 1.2.
 
 Launch the project
 ------------------
