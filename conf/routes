@@ -12,7 +12,7 @@ GET     /public/                                staticDir:public
 GET     /                                       Home.index
 # Planning page
 GET     /planning                               Planning.index
-# Stastitics page
+# Statistics page
 GET     /stats                                  Statistics.index
 # Debug page
 GET     /debug                                  Debug.index
@@ -20,9 +20,9 @@ GET     /debug                                  Debug.index
 GET     /about                                  About.index
 
 # Operation on persons
-DELETE	/person/{id}				Planning.deletePerson
-DELETE	/person/onCall/{id}			Home.freePerson
-PUT	/person/onCall/{id}             	Home.onCallPerson
+DELETE	/person/{id}/week/{weekNb}				Planning.deletePerson
+DELETE	/person/onCall/{id}		            	Home.freePerson
+PUT	    /person/onCall/{id}             	    Home.onCallPerson
 POST    /person/create                          Planning.createPerson
 POST    /person/create/ajax                     Planning.createPersonAjax
 

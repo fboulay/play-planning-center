@@ -23,7 +23,7 @@
                 #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
                                                      new org.joda.time.DateMidnight(new java.util.Date()))
                                                      .getDays() == 0}
-                    <th class="none">today<span class="triangle"/></th>
+                    <th class="none">today<span class="triangle"></span></th>
                 #{/if}
                 #{else}
                     <th></th>
@@ -58,6 +58,7 @@
                     <div id="personForm" style="display: none">
                 #{/else}
                     #{form @Planning.createPerson()}
+                        <input type="hidden" name="weekNb" value="${weekNb}"/>
                         <label for="firstName">First Name</label>
                         <input type="text" name="person.firstName" id="firstName" value="${person?.firstName}"/>
                         <label for="lastName">Last Name</label>
@@ -88,7 +89,7 @@
                 <td>${pats.person.name}
                     #{ if pats.person.isDeletable }
                         <span class="delete">
-                            <a href="@{Planning.deletePerson(pats.person.id)}?x-http-method-override=DELETE" title="Delete ${pats.person.name}">&nbsp;X&nbsp;</a>
+                            <a href="@{Planning.deletePerson(pats.person.id, weekNb)}?x-http-method-override=DELETE" title="Delete ${pats.person.name}">&nbsp;X&nbsp;</a>
                         </span>
                     #{/if}
                 </td>
@@ -102,9 +103,9 @@
                 <td>
             #{/else}
             <a id="pats-${pats.id}" href="@{Planning.nextStatus(pats.id)}?x-http-method-override=PUT" class="tooltip">
-                <div style="background-color: ${pats.status.htmlColor}" title="${pats.status.value}" class="transition">&nbsp;</div>
+                <div style="background-color: ${pats.status.htmlColor}" class="transition">&nbsp;</div>
                 <span class="classic">
-                    Update the status to ${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}
+                    Update the status to <strong>${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}</strong>
                 </span>
             </a>
             </td>
@@ -166,6 +167,7 @@ Nothing to schedule...
         var args = {};
         args["person.firstName"] = $(this).find("#firstName").val();
         args["person.lastName"] =  $(this).find("#lastName").val();
+        args["weekNb"] = $(this).find("input[name=weekNb]").val();
         args["authenticityToken"] =  $(this).find("input[type=hidden]").val();
         $("#content").addClass("loading");
         $.post(url, args, 

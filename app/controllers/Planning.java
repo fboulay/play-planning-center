@@ -5,46 +5,46 @@
 package controllers;
 
 import controllers.ajax.NewStatus;
+
 import java.util.List;
+
 import models.Person;
 import models.PersonAndTimeSlot;
 import models.TimeSlot;
 import models.utils.TimeSlotListRange;
+import play.Logger;
 import play.data.validation.Required;
 import play.data.validation.Valid;
 import play.mvc.Controller;
 import play.mvc.With;
 
 /**
- *
  * @author florian
  */
 @With(DefaultInterceptors.class)
 public class Planning extends Controller {
 
     public static void index() {
-        List<TimeSlot> curWeek = TimeSlot.getCurrentWeek();
-        TimeSlotListRange range = new TimeSlotListRange(curWeek);
-        renderPlanning(range, 0);
+        renderPlanning(0);
     }
 
-    public static void deletePerson(long id) {
+    public static void deletePerson(long id, int weekNb) {
         Person person = Person.<Person>findById(id);
         if (!person.isDeletable) {
             error(401, "No right to delete " + person.getName());
         }
         person.delete();
-        index();
+        renderPlanning(weekNb);
     }
 
-    public static void createPerson(@Valid Person person) {
+    public static void createPerson(@Valid Person person, int weekNb) {
         if (validation.hasErrors()) {
             flash.put("createError", true);
             index();
         }
         person.isDeletable = true;
         person.save();
-        index();
+        renderPlanning(weekNb);
     }
 
     public static void createPersonAjax(@Valid Person person) {
@@ -54,8 +54,7 @@ public class Planning extends Controller {
 
         person.isDeletable = true;
         person.save();
-        String hyper = "bob sponge";
-        render("Planning/line.html", hyper);
+        render("Planning/line.html");
 
     }
 
@@ -65,12 +64,8 @@ public class Planning extends Controller {
         }
         if (weekNb > 30 || weekNb < -30) {
             forbidden("This week cannot be shown");
-
         }
-        List<TimeSlot> curWeek = TimeSlot.getCurrentWeek();
-        TimeSlotListRange range = new TimeSlotListRange(curWeek);
-        range.addWeek(weekNb);
-        renderPlanning(range, weekNb);
+        renderPlanning(weekNb);
     }
 
     public static void nextStatus(@Required long id) {
@@ -96,8 +91,10 @@ public class Planning extends Controller {
         renderJSON(json);
     }
 
-    private static void renderPlanning(TimeSlotListRange range, int weekNb) {
+    private static void renderPlanning(int weekNb) {
         //List<Person> personsInWeek = Person.getAllPersonInTimeSlot(range.getStartDate(), range.getEndDate());
+        TimeSlotListRange range = new TimeSlotListRange(TimeSlot.getCurrentWeek());
+        range.addWeek(weekNb);
         List<TimeSlot> curWeek = TimeSlot.findTimeSlotsForRange(range);
         List<PersonAndTimeSlot> patsInWeek = PersonAndTimeSlot.getPatsInTimeSlot(range.getStartDate(), range.getEndDate());
         render("Planning/index.html", curWeek, patsInWeek, weekNb);
