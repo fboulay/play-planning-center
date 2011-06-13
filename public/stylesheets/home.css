@@ -1,0 +1,17 @@
+#countdown_time {
+    font-size: 5em;
+    font-weight: bold;
+    color: white;
+    background-color:  #2B477D;
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.home-table{
+    width: 100%;
+    border-spacing: 0px;
+}
+
+.home-table > tbody > tr > td{
+    padding: 0px;
+}
