@@ -1,9 +1,11 @@
 package controllers;
 
+import java.util.Date;
 import java.util.List;
 
 import models.Person;
 import models.PersonAndTimeSlot;
+import org.joda.time.DateMidnight;
 import play.mvc.Controller;
 import play.mvc.With;
 
@@ -13,7 +15,8 @@ public class Home extends Controller {
     public static void index() {
         List<Person> freePersons = Person.getAllPerson(PersonAndTimeSlot.TimeSlotStatus.AVAILABLE);
         List<Person> onCallPersons = Person.getAllPerson(PersonAndTimeSlot.TimeSlotStatus.ON_CALL);
-        render(freePersons, onCallPersons);
+        long timeToNextChange =  (new DateMidnight().plusDays(1).toDate().getTime() - new Date().getTime()) / 1000;
+        render(freePersons, onCallPersons, timeToNextChange);
     }
 
     public static void deletePerson(long id) {

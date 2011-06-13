@@ -1,21 +1,44 @@
 #{extends 'main.html' /}
 #{set title:'Home page - Summary' /}
+#{set 'moreScripts'}
+<script src="@{'/public/javascripts/countdown.js'}" type="text/javascript" charset="utf-8"></script>
+#{/set}
+#{set 'moreStyles'}
+<link rel="stylesheet" type="text/css" media="screen" href="@{'/public/stylesheets/home.css'}"/>
+#{/set}
 
-
-#{if freePersons}
-<h1><span>List of currently free employees</span></h1>
-<ul>
-	#{list freePersons}
-		<li>${_.firstName} ${_.lastName}</li>
-	#{/list}
-</ul>
-#{/if}
-
-#{if onCallPersons}
-<h1><span>List of currently on call employees</span></h1>
-<ul>
-	#{list onCallPersons}
-		<li>${_.firstName} ${_.lastName}</li>
-	#{/list}
-</ul>
-#{/if}
+<table class="home-table">
+    <tbody>
+    <tr>
+        <td>
+            #{if freePersons}
+            <h1><span>List of currently free employees</span></h1>
+            <ul>
+                #{list freePersons}
+                <li>${_.firstName} ${_.lastName}</li>
+                #{/list}
+            </ul>
+            #{/if}
+        </td>
+        <td rowspan="2">
+            <div style="text-align:right">Next change in</div>
+            <div id="countdown_time"></div>
+            <script type="text/javascript">
+                jsCountdown.init(${timeToNextChange}, 'countdown_time');
+            </script>
+        </td>
+    </tr>
+    <tr>
+        <td>
+            #{if onCallPersons}
+            <h1><span>List of currently on call employees</span></h1>
+            <ul>
+                #{list onCallPersons}
+                <li>${_.firstName} ${_.lastName}</li>
+                #{/list}
+            </ul>
+            #{/if}
+        </td>
+    </tr>
+    </tbody>
+</table>
