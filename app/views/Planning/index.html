@@ -8,123 +8,135 @@
 
 #{if curWeek && patsInWeek}
 
-<div id="previous" class="arrow" title="previous week">
-    <a href="@{Planning.changeRelativeWeek(weekNb - 1)}">&laquo;</a>
-</div>
-<div id="next" class="arrow" title="next week">
-    <a href="@{Planning.changeRelativeWeek(weekNb + 1)}">&raquo;</a>
-</div>
+<table style="width: 100%">
+    <tr>
+        <td>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th></th>
-            #{list curWeek}
-                #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
-                                                     new org.joda.time.DateMidnight(new java.util.Date()))
-                                                     .getDays() == 0}
-                    <th class="none">today<span class="triangle"></span></th>
-                #{/if}
-                #{else}
-                    <th></th>
-                #{/else}
+            <div id="previous" class="arrow" title="previous week">
+                <a href="@{Planning.changeRelativeWeek(weekNb - 1)}">&laquo;</a>
+            </div>
+        </td>
+        <td>
 
-            #{/list}
-        </tr>
-        <tr>
-            <th></th>
-            #{list curWeek}
-                #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
-                                                     new org.joda.time.DateMidnight(new java.util.Date()))
-                                                     .getDays() == 0}
-                    <th class="today">
-                #{/if}
-                #{else}
-                    <th>
-                #{/else}
-                    ${_.startDate.format("E MMM dd")}</th>
-            #{/list}
-        </tr>
-    </thead>
-    <tfoot>
-        <tr>
-            <td colspan="8">
-                #{if flash.createError}
-                    <div id="addDiv" style="display:none"><a href="#">Add a person&hellip;</a></div>
-                    <div id="personForm">
-                #{/if}
-                #{else}
-                    <div id="addDiv"><a href="#">Add a person&hellip;</a></div>
-                    <div id="personForm" style="display: none">
-                #{/else}
-                    #{form @Planning.createPerson()}
-                        <input type="hidden" name="weekNb" value="${weekNb}"/>
-                        <label for="firstName">First Name</label>
-                        <input type="text" name="person.firstName" id="firstName" value="${person?.firstName}"/>
-                        <label for="lastName">Last Name</label>
-                        <input type="text" name="person.lastName" id="lastName" value="${person?.lastName}"/>
-                        <input type="submit" value="Create"/>
-                        #{if flash.createError}
-                        <div class="error">
-                            All fields are required
-                        </div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        #{list curWeek}
+                        #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
+                        new org.joda.time.DateMidnight(new java.util.Date()))
+                        .getDays() == 0}
+                        <th class="none">today<span class="triangle"></span></th>
                         #{/if}
-                    #{/form}
-                </div>
-                
-            </td>
-        </tr>
-    </tfoot>
-    <tbody>
-        %{ 
-            def pers = -1; 
-         }%
-        #{list items:patsInWeek, as:'pats'}
-            %{ if (pers != pats.person.id){
-                pers = pats.person.id;
-                if (pers != -1) { }%
+                        #{else}
+                        <th></th>
+                        #{/else}
+
+                        #{/list}
                     </tr>
-                %{ } }%
-                <tr>
-                <td>${pats.person.name}
-                    #{ if pats.person.isDeletable }
-                        <span class="delete">
-                            <a href="@{Planning.deletePerson(pats.person.id, weekNb)}?x-http-method-override=DELETE" title="Delete ${pats.person.name}">&nbsp;X&nbsp;</a>
-                        </span>
-                    #{/if}
-                </td>
-            %{ } }%
-            #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(pats.timeSlot.startDate),
-                                                 new org.joda.time.DateMidnight(new java.util.Date()))
-                                                .getDays() == 0}
-               <td class="today" >
-            #{/if}
-            #{else}
-                <td>
-            #{/else}
-            <a id="pats-${pats.id}" href="@{Planning.nextStatus(pats.id)}?x-http-method-override=PUT" class="tooltip">
-                <div style="background-color: ${pats.status.htmlColor}" class="transition">&nbsp;</div>
-                <span class="classic">
-                    Update the status to <strong>${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}</strong>
-                </span>
-            </a>
-            </td>
-        #{/list}
-        </tr>
-    </tbody>
+                    <tr>
+                        <th></th>
+                        #{list curWeek}
+                        #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
+                        new org.joda.time.DateMidnight(new java.util.Date()))
+                        .getDays() == 0}
+                        <th class="today">
+                            #{/if}
+                            #{else}
+                        <th>
+                            #{/else}
+                            ${_.startDate.format("E MMM dd")}</th>
+                        #{/list}
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                        <td colspan="8">
+                            #{if flash.createError}
+                            <div id="addDiv" style="display:none"><a href="#">Add a person&hellip;</a></div>
+                            <div id="personForm">
+                                #{/if}
+                                #{else}
+                                <div id="addDiv"><a href="#">Add a person&hellip;</a></div>
+                                <div id="personForm" style="display: none">
+                                    #{/else}
+                                    #{form @Planning.createPerson()}
+                                    <input type="hidden" name="weekNb" value="${weekNb}"/>
+                                    <label for="firstName">First Name</label>
+                                    <input type="text" name="person.firstName" id="firstName" value="${person?.firstName}"/>
+                                    <label for="lastName">Last Name</label>
+                                    <input type="text" name="person.lastName" id="lastName" value="${person?.lastName}"/>
+                                    <input type="submit" value="Create"/>
+                                    #{if flash.createError}
+                                    <div class="error">
+                                        All fields are required
+                                    </div>
+                                    #{/if}
+                                    #{/form}
+                                </div>
+
+                        </td>
+                    </tr>
+                </tfoot>
+                <tbody>
+                    %{ 
+                    def pers = -1; 
+                    }%
+                    #{list items:patsInWeek, as:'pats'}
+                    %{ if (pers != pats.person.id){
+                    pers = pats.person.id;
+                    if (pers != -1) { }%
+                    </tr>
+                    %{ } }%
+                    <tr>
+                        <td>${pats.person.name}
+                            #{ if pats.person.isDeletable }
+                            <span class="delete">
+                                <a href="@{Planning.deletePerson(pats.person.id, weekNb)}?x-http-method-override=DELETE" title="Delete ${pats.person.name}">&nbsp;X&nbsp;</a>
+                            </span>
+                            #{/if}
+                        </td>
+                        %{ } }%
+                        #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(pats.timeSlot.startDate),
+                        new org.joda.time.DateMidnight(new java.util.Date()))
+                        .getDays() == 0}
+                        <td class="today" >
+                            #{/if}
+                            #{else}
+                        <td>
+                            #{/else}
+                            <a id="pats-${pats.id}" href="@{Planning.nextStatus(pats.id)}?x-http-method-override=PUT" class="tooltip">
+                                <div style="background-color: ${pats.status.htmlColor}" class="transition">&nbsp;</div>
+                                <span class="classic">
+                                    Update the status to <strong>${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}</strong>
+                                </span>
+                            </a>
+                        </td>
+                        #{/list}
+                    </tr>
+                </tbody>
+            </table>
+
+        </td>
+        <td>
+            <div id="next" class="arrow" title="next week">
+                <a href="@{Planning.changeRelativeWeek(weekNb + 1)}">&raquo;</a>
+            </div>
+        </td>
+    </tr>
 </table>
 
 #{/if}
 #{else}
 <p>
-Nothing to schedule...
+    Nothing to schedule...
 </p>
 
 <h2>Add the first person</h2>
 #{if flash.createError}
-    <div class="error">
+<div class="error">
     All fields are required
-    </div>
+</div>
 #{/if}
 <div id="personForm">
     #{form @Planning.createPerson()}
@@ -152,12 +164,12 @@ Nothing to schedule...
         });
     });
     
-//    // hide the form to add a new person
-//    $("#personForm").click(function(event){
-//        $("#personForm").fadeOut(200, function () {
-//            $("#addDiv").fadeIn();
-//        });
-//    });
+    //    // hide the form to add a new person
+    //    $("#personForm").click(function(event){
+    //        $("#personForm").fadeOut(200, function () {
+    //            $("#addDiv").fadeIn();
+    //        });
+    //    });
     
     // manage the create person form in ajax
     $("#personForm > form").live("submit", function(event){
@@ -174,8 +186,8 @@ Nothing to schedule...
         function(data){
             $("#content").removeClass("loading");
             $("#content").html(data.substring(data.indexOf('<div id="content"') + 37, data.indexOf('<div id="footer">')));
-//            $(".table > tbody > tr:last").hide();
-//            $(".table > tbody > tr:last").slideDown("slow");
+            //            $(".table > tbody > tr:last").hide();
+            //            $(".table > tbody > tr:last").slideDown("slow");
         });
     });
 

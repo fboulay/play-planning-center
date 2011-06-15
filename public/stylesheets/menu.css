@@ -9,8 +9,8 @@ ul#navigation {
 }
 
 ul#navigation li {
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
+/*    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;*/
     border-radius: 6px;
     float: left;
     width: 168px;
@@ -40,8 +40,8 @@ ul#navigation li.shadow {
 }
 
 ul#navigation li a:link, ul#navigation li a:visited {
-    -webkit-border-radius: 6px;
-    -moz-border-radius: 6px;
+/*    -webkit-border-radius: 6px;
+    -moz-border-radius: 6px;*/
     border-radius: 6px;
     display: block;
     text-align: center;

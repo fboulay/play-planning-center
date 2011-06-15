@@ -15,7 +15,8 @@ public class Home extends Controller {
     public static void index() {
         List<Person> freePersons = Person.getAllPerson(PersonAndTimeSlot.TimeSlotStatus.AVAILABLE);
         List<Person> onCallPersons = Person.getAllPerson(PersonAndTimeSlot.TimeSlotStatus.ON_CALL);
-        long timeToNextChange =  (new DateMidnight().plusDays(1).toDate().getTime() - new Date().getTime()) / 1000;
+//        long timeToNextChange =  (new DateMidnight().plusDays(1).toDate().getTime() - new Date().getTime()) / 1000;
+        long timeToNextChange = PersonAndTimeSlot.timeToNextStatus();
         render(freePersons, onCallPersons, timeToNextChange);
     }
 

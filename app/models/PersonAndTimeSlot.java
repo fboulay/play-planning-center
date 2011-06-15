@@ -1,4 +1,3 @@
-
 package models;
 
 import java.util.Date;
@@ -7,8 +6,9 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 import javax.persistence.Query;
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
 import play.Logger;
-import play.Play;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
 
@@ -18,17 +18,13 @@ import play.db.jpa.Model;
  * @author florian
  */
 @Entity
-public class PersonAndTimeSlot extends Model {
-
-   
+public class PersonAndTimeSlot extends Model implements Comparable<PersonAndTimeSlot> {
 
     public static enum TimeSlotStatus {
 
         AVAILABLE("Available", "green"),
         UNAVAILABLE("Unavailable", "grey"),
         ON_CALL("On call", "red");
-
-       
         private String value;
         private String htmlcolor;
 
@@ -36,17 +32,17 @@ public class PersonAndTimeSlot extends Model {
             this.value = value;
             this.htmlcolor = htmlColor;
         }
-        
+
         public static TimeSlotStatus findNextStatus(TimeSlotStatus timeSlotStatus) {
             TimeSlotStatus[] values = TimeSlotStatus.values();
             int index = -1;
             for (int i = 0; i < values.length; i++) {
-                if(values[i] == timeSlotStatus){
+                if (values[i] == timeSlotStatus) {
                     index = i;
                     break;
                 }
             }
-            
+
             return values[(index + 1) % values.length];
         }
 
@@ -90,11 +86,31 @@ public class PersonAndTimeSlot extends Model {
         }
         return max;
     }
-    
-     public static void nextStatus(long id) {
+
+    public static void nextStatus(long id) {
         PersonAndTimeSlot pats = PersonAndTimeSlot.findById(id);
         pats.status = TimeSlotStatus.findNextStatus(pats.status);
         pats.save();
+    }
+
+    public static long timeToNextStatus() {
+        DateTime now = new DateTime();
+        List<PersonAndTimeSlot> listToday = PersonAndTimeSlot.find("select pats from PersonAndTimeSlot pats where pats.timeSlot.startDate <= ? and pats.timeSlot.endDate >=? order by pats.id", now.toDate(), now.toDate()).fetch();
+
+        // ten days max
+        for (int i = 1; i < 10; i++) {
+
+            DateTime dayToCompare = now.plusDays(i);
+            List<PersonAndTimeSlot> listDayToCompare = PersonAndTimeSlot.find("select pats from PersonAndTimeSlot pats where pats.timeSlot.startDate <= ? and pats.timeSlot.endDate >=? order by pats.id", dayToCompare.toDate(), dayToCompare.toDate()).fetch();
+            for (int j = 0; j < listToday.size(); j++) {
+                if (listToday.get(j).status != listDayToCompare.get(j).status){
+                    return (new DateMidnight().plusDays(i).toDate().getTime() - new Date().getTime()) / 1000;
+                }
+            }
+        }
+
+        // default dummy 100 days
+        return  (new DateMidnight().plusDays(100).toDate().getTime() - new Date().getTime()) / 1000;
     }
 
     static void createMissingPats(Date startDate, Date endDate) {
@@ -134,6 +150,10 @@ public class PersonAndTimeSlot extends Model {
         this.person = person;
         this.timeSlot = timeSlot;
         this.status = status;
+    }
+
+    public int compareTo(PersonAndTimeSlot o) {
+        return id.compareTo(o.id);
     }
 
     @Override

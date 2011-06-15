@@ -1,14 +1,30 @@
-#countdown_time {
-    font-size: 5em;
+#countdown_title{
+    text-align: center;
+    font-family: "Droid Sans", "Trebuchet MS",Helvetica,sans-serif; 
+}
+
+#countdown_title span{
+    border-style: solid;
+    border-width: 1px;  
+    border-color:  #2B477D;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    color:white;
+    background-color:  #2B477D;
     font-weight: bold;
+}
+
+#countdown_time {
+    font-size: 6em;
+    font-family: 'VT323', arial, serif; 
     color: white;
     background-color:  #2B477D;
     border-top-left-radius: 20px;
     border-bottom-left-radius: 20px;
+    text-shadow: 2px 2px 0px #888;
 }
 
 .home-table{
-    width: 100%;
     border-spacing: 0px;
 }
 
