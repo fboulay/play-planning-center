@@ -11,6 +11,7 @@ import org.joda.time.DateTime;
 import play.Logger;
 import play.db.jpa.JPA;
 import play.db.jpa.Model;
+import play.i18n.Messages;
 
 /**
  * Association of a time slot with a person and a status.
@@ -22,9 +23,9 @@ public class PersonAndTimeSlot extends Model implements Comparable<PersonAndTime
 
     public static enum TimeSlotStatus {
 
-        AVAILABLE("Available", "green"),
-        UNAVAILABLE("Unavailable", "grey"),
-        ON_CALL("On call", "red");
+        AVAILABLE("status.available", "green"),
+        UNAVAILABLE("status.unavailable", "grey"),
+        ON_CALL("status.oncall", "red");
         private String value;
         private String htmlcolor;
 
@@ -47,7 +48,7 @@ public class PersonAndTimeSlot extends Model implements Comparable<PersonAndTime
         }
 
         public String getValue() {
-            return value;
+            return Messages.get(value);
         }
 
         public String getHtmlColor() {
@@ -101,16 +102,27 @@ public class PersonAndTimeSlot extends Model implements Comparable<PersonAndTime
         for (int i = 1; i < 10; i++) {
 
             DateTime dayToCompare = now.plusDays(i);
+            
             List<PersonAndTimeSlot> listDayToCompare = PersonAndTimeSlot.find("select pats from PersonAndTimeSlot pats where pats.timeSlot.startDate <= ? and pats.timeSlot.endDate >=? order by pats.id", dayToCompare.toDate(), dayToCompare.toDate()).fetch();
-            for (int j = 0; j < listToday.size(); j++) {
-                if (listToday.get(j).status != listDayToCompare.get(j).status){
-                    return (new DateMidnight().plusDays(i).toDate().getTime() - new Date().getTime()) / 1000;
+            Logger.debug("%s", listDayToCompare);
+            // test if the dayToCompare exists in database, if not create it
+            if (listDayToCompare == null || listDayToCompare.size() == 0){
+                new TimeSlot(dayToCompare.toDateMidnight().toDate(), dayToCompare.plusDays(1).toDateMidnight().toDate()).save();
+                createMissingPats(dayToCompare.toDateMidnight().toDate(), dayToCompare.plusDays(1).toDateMidnight().toDate());
+                listDayToCompare = PersonAndTimeSlot.find("select pats from PersonAndTimeSlot pats where pats.timeSlot.startDate <= ? and pats.timeSlot.endDate >=? order by pats.id", dayToCompare.toDate(), dayToCompare.toDate()).fetch();
+            }
+            
+            if (listToday != null && listToday.size() > 0 && listDayToCompare != null && listDayToCompare.size() > 0) {
+                for (int j = 0; j < listToday.size(); j++) {
+                    if (listToday.get(j).status != listDayToCompare.get(j).status) {
+                        return (new DateMidnight().plusDays(i).toDate().getTime() - new Date().getTime()) / 1000;
+                    }
                 }
             }
         }
 
         // default dummy 100 days
-        return  (new DateMidnight().plusDays(100).toDate().getTime() - new Date().getTime()) / 1000;
+        return (new DateMidnight().plusDays(100).toDate().getTime() - new Date().getTime()) / 1000;
     }
 
     static void createMissingPats(Date startDate, Date endDate) {
@@ -119,7 +131,7 @@ public class PersonAndTimeSlot extends Model implements Comparable<PersonAndTime
         long nbPerson = Person.count();
         long nbPats = PersonAndTimeSlot.count("select count(distinct pats) from PersonAndTimeSlot pats "
                 + "where pats.timeSlot.startDate >= ? and pats.timeSlot.endDate <= ?", startDate, endDate);
-
+        
         // if there is missing pats, then we create them
         if (nbSlots * nbPerson != nbPats) {
             List<Person> listPerson = Person.findAll();

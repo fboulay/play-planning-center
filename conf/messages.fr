@@ -1,0 +1,33 @@
+status.available=Disponible
+status.unavailable=Non disponible
+status.oncall=D'astreinte
+
+menu.home=Accueil
+menu.planning=Planning
+menu.stats=Statistiques
+menu.about=A Propos
+menu.debug=Debug Mode
+
+home.free=Liste des employés disponibles
+home.oncall=Liste des employés d'astreinte
+home.next=Prochain changement de statut dans
+
+plan.today=Aujourd'hui
+plan.add=Ajouter une personne&hellip;
+plan.add.first=Ajouter la première personne
+plan.first=Prénom
+plan.last=Nom
+plan.create=Créer
+plan.create.error=Tous les champs doivent être renseignés
+plan.update.status=Changez le statut en 
+plan.nothing=Rien à planifier&hellip;
+
+stats.nothing=Les statistiques ne peuvent pas être générées
+stats.title=Personnes+d'astreinte+durant+cette+semaine
+
+about.text=This is a sample application made with Play! framework. Several versions will be released to show additional features.
+about.text=Cette application est faite avec le framework Play. Plusieurs fonctionnalités seront ajoutés dans les versions ultérieures.
+
+footer.app=Play Planning Center (PPC)
+footer.app.more=Exemple d'application fait avec <a href="http://playframework.org">Play! framework ${play.Play.version} </a> - %s - <a href="http://blog.infine.com">In Fine Consulting</a>
+footer.html5=Cette page est valide HTML5

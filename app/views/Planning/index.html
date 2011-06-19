@@ -26,7 +26,7 @@
                         #{ if org.joda.time.Days.daysBetween(new org.joda.time.DateMidnight(_.startDate),
                         new org.joda.time.DateMidnight(new java.util.Date()))
                         .getDays() == 0}
-                        <th class="none">today<span class="triangle"></span></th>
+                        <th class="none">&{'plan.today'}<span class="triangle"></span></th>
                         #{/if}
                         #{else}
                         <th></th>
@@ -45,7 +45,7 @@
                             #{else}
                         <th>
                             #{/else}
-                            ${_.startDate.format("E MMM dd")}</th>
+                            ${_.startDate.format()}</th>
                         #{/list}
                     </tr>
                 </thead>
@@ -53,23 +53,23 @@
                     <tr>
                         <td colspan="8">
                             #{if flash.createError}
-                            <div id="addDiv" style="display:none"><a href="#">Add a person&hellip;</a></div>
+                            <div id="addDiv" style="display:none"><a href="#">&{'plan.add'}</a></div>
                             <div id="personForm">
                                 #{/if}
                                 #{else}
-                                <div id="addDiv"><a href="#">Add a person&hellip;</a></div>
+                                <div id="addDiv"><a href="#">&{'plan.add'}</a></div>
                                 <div id="personForm" style="display: none">
                                     #{/else}
                                     #{form @Planning.createPerson()}
                                     <input type="hidden" name="weekNb" value="${weekNb}"/>
-                                    <label for="firstName">First Name</label>
+                                    <label for="firstName">&{'plan.first'}</label>
                                     <input type="text" name="person.firstName" id="firstName" value="${person?.firstName}"/>
-                                    <label for="lastName">Last Name</label>
+                                    <label for="lastName">&{'plan.last'}</label>
                                     <input type="text" name="person.lastName" id="lastName" value="${person?.lastName}"/>
-                                    <input type="submit" value="Create"/>
+                                    <input type="submit" value="&{'plan.create'}"/>
                                     #{if flash.createError}
                                     <div class="error">
-                                        All fields are required
+                                        &{'plan.create.error'}
                                     </div>
                                     #{/if}
                                     #{/form}
@@ -108,7 +108,7 @@
                             <a id="pats-${pats.id}" href="@{Planning.nextStatus(pats.id)}?x-http-method-override=PUT" class="tooltip">
                                 <div style="background-color: ${pats.status.htmlColor}" class="transition">&nbsp;</div>
                                 <span class="classic">
-                                    Update the status to <strong>${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}</strong>
+                                    &{'plan.update.status'} <strong>${models.PersonAndTimeSlot.TimeSlotStatus.findNextStatus(pats.status).value}</strong>
                                 </span>
                             </a>
                         </td>
@@ -129,24 +129,24 @@
 #{/if}
 #{else}
 <p>
-    Nothing to schedule...
+    &{'plan.nothing'}
 </p>
 
-<h2>Add the first person</h2>
+<h2>&{'plan.add.first'}</h2>
 #{if flash.createError}
 <div class="error">
-    All fields are required
+   &{'plan.create.error'}
 </div>
 #{/if}
 <div id="personForm">
     #{form @Planning.createPerson()}
-    <label for="firstName">First Name</label>
+    <label for="firstName">&{'plan.first'}</label>
     <input type="text" name="person.firstName" id="firstName"/>
     <br/>
-    <label for="lastName">Last Name</label>
+    <label for="lastName">&{'plan.last'}</label>
     <input type="text" name="person.lastName" id="lastName"/>
     <br/>
-    <input type="submit" value="Create"/>
+    <input type="submit" value="&{'plan.create'}"/>
     #{/form}
 </div>
 

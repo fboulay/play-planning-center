@@ -12,7 +12,7 @@
     <tr>
         <td>
             #{if freePersons}
-            <h1><span>List of currently free employees</span></h1>
+            <h1><span>&{'home.free'}</span></h1>
             <ul>
                 #{list freePersons}
                 <li>${_.firstName} ${_.lastName}</li>
@@ -21,7 +21,7 @@
             #{/if}
         </td>
         <td rowspan="2">
-            <div id="countdown_title"><span>Next planning change in</span></div>
+            <div id="countdown_title"><span>&{'home.next'}</span></div>
             <div id="countdown_time"></div>
             <script type="text/javascript">
                 jsCountdown.init(${timeToNextChange}, 'countdown_time');
@@ -31,7 +31,7 @@
     <tr>
         <td>
             #{if onCallPersons}
-            <h1><span>List of currently on call employees</span></h1>
+            <h1><span>&{'home.oncall'}</span></h1>
             <ul>
                 #{list onCallPersons}
                 <li>${_.firstName} ${_.lastName}</li>

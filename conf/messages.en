@@ -1,0 +1,32 @@
+status.available=Available
+status.unavailable=Unvailable
+status.oncall=On call
+
+menu.home=Home
+menu.planning=Planning
+menu.stats=Statistics
+menu.about=About
+menu.debug=Debug Mode
+
+home.free=List of currently free employees
+home.oncall=List of currently on call employees
+home.next=Next planning change in
+
+plan.today=today
+plan.add=Add a person&hellip;
+plan.add.first=Add the first person
+plan.first=First Name
+plan.last=Last Name
+plan.create=Create
+plan.create.error=All fields are required
+plan.update.status=Update the status to
+plan.nothing=Nothing to schedule&hellip;
+
+stats.nothing=No statistics to gather
+stats.title=On+call+per+person+for+current+week
+
+about.text=This is a sample application made with Play! framework. Several versions will be released to show additional features.
+
+footer.app=Play Planning Center (PPC)
+footer.app.more=Example application made with <a href="http://playframework.org">Play! framework ${play.Play.version} </a> - %s - <a href="http://blog.infine.com">In Fine Consulting</a>
+footer.html5=This page is HTML5 valid.

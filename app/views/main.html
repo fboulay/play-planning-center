@@ -25,7 +25,7 @@
                 #{else}
                     <li class="one">
                 #{/else}
-                <a href="@{Home.index}">Home</a></li>
+                <a href="@{Home.index}">&{'menu.home'}</a></li>
 
                 #{if play.mvc.Http.Request.current().controller == "Planning"}
                  <li class="two selected">
@@ -33,7 +33,7 @@
                 #{else}
                     <li class="two">
                 #{/else}
-                <a href="@{Planning.index}">Planning</a></li>
+                <a href="@{Planning.index}">&{'menu.planning'}</a></li>
 
                 #{if play.mvc.Http.Request.current().controller == "Statistics"}
                 <li class="three selected">
@@ -41,7 +41,7 @@
                 #{else}
                     <li class="three">
                 #{/else}
-                <a href="@{Statistics.index}">Statistics</a></li>
+                <a href="@{Statistics.index}">&{'menu.stats'}</a></li>
 
                 #{if play.mvc.Http.Request.current().controller == "About"}
                 <li class="four selected">
@@ -49,7 +49,7 @@
                 #{else}
                     <li class="four">
                 #{/else}
-                <a href="@{About.index}">About</a></li>
+                <a href="@{About.index}">&{'menu.about'}</a></li>
 
                 #{if play.mvc.Http.Request.current().controller == "Debug"}
                     <li class="four selected">
@@ -57,7 +57,7 @@
                 #{else}
                     <li class="four">
                 #{/else}
-                <a href="@{Debug.index}">Debug Mode</a></li>
+                <a href="@{Debug.index}">&{'menu.debug'}</a></li>
                     
 <!--                <li class="shadow"></li>-->
             </ul>
@@ -73,10 +73,8 @@
             </div>
 
             <div id="footer">
-                <span class="strong">Play Planning Center (PPC)</span> - Example application made with 
-                <a href="http://playframework.org">Play! framework ${play.Play.version} </a> - ${new java.util.Date().format("yyyy")} -
-                <a href="http://blog.infine.com">In Fine Consulting</a><br/>
-                This page is HTML5 valid.<br/>
+                <span class="strong">&{'footer.app'}</span> - &{'footer.app.more', new java.util.Date().format("yyyy")}</a><br/>
+                &{'footer.html5'}<br/>
                 <form action="http://validator.w3.org/check" method="post" target="_blank" id="validForm">
                     <input type="hidden" value="" id="validContent" name="fragment"/>
                     <a href="#" id="validLink">

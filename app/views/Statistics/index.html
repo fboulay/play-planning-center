@@ -31,11 +31,11 @@
     &chtt=People -->
 
 <div style="text-align: center">
-    <img src="http://chart.apis.google.com/chart?chxl=0:|${legend}&chxr=0,0,10|1,0,${maxY}&chxt=x,y&chbh=a,15,15&chs=600x270&cht=bvs&chco=D3805C&chds=0,${maxY}&chd=t:${values}&chtt=On+call+per+person+for+current+week" alt="Horizontal bar chart" />
+    <img src="http://chart.apis.google.com/chart?chxl=0:|${legend}&chxr=0,0,10|1,0,${maxY}&chxt=x,y&chbh=a,15,15&chs=600x270&cht=bvs&chco=D3805C&chds=0,${maxY}&chd=t:${values}&chtt=&{'stats.title'}" alt="Horizontal bar chart" />
 </div>
 #{/if}
 #{else}
 <p>
-No statistics to gather
+&{'stats.nothing'}
 </p>
 #{/else}
