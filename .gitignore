@@ -1,0 +1,11 @@
+precompiled
+test-result
+logs
+bin/
+data/
+db/
+dist/
+lib/
+tmp/
+modules/
+
